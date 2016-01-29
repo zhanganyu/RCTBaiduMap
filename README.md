@@ -1,10 +1,19 @@
 # RCTBaiduMap
 react-native support for BaiduMap on iOS
 
+导入方式:
+1.首先添加baidumap的framework至工程中，建议使用pods :
 
+pod 'BaiduMapKit' #百度地图SDK
+
+2.appDelegate 加入以下启动代码:
+_mapManager = [[BMKMapManager alloc] init];
+ [_mapManager start:@"你的百度地图appKey" generalDelegate:self];
+
+3.复制xcode-files-to-add中的文件至工程中 并添加至target
 
 使用方式:
-var MapView = require('./components/BMKMapView');
+var MapView = require('./react-native-bmkmap-ios/BMKMapView');
 
 .....
 
@@ -30,8 +39,10 @@ var MapView = require('./components/BMKMapView');
 	    		*/
 	    }).done();
 	},
-	_onLocated() {
+	_onLocated(e) {
 		this.setState({isUpdating:false});
+		//定位后的坐标数据在e中
+		console.log(e);
 	},
 	render(){
 		return <MapView
@@ -41,3 +52,23 @@ var MapView = require('./components/BMKMapView');
 				onLocated = {this._onLocated}
 				style={{flex:1}}/>
 	},
+
+
+MapView可以接受的属性
+
+//是否开启定位模式
+	isUpdating: React.PropTypes.bool,
+	//是否显示用户位置
+	showsUserLocation: React.PropTypes.bool,
+	/*定位成功の回调 callback 格式:
+	* {
+	*	 coords:{
+	* 			longitude:double
+	* 			latitude:double
+	* 		}
+	* }
+	* 
+	*/
+	onLocated: React.PropTypes.func,
+	//覆盖物数组
+	overlays: React.PropTypes.array,
